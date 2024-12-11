@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center">
+    <h1>Welcome, Dr. {{ username }}!</h1>
+    <p>This is your Doctor dashboard.</p>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+</div>
+{% endblock %}

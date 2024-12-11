@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="container mt-5">
+    <!-- PCOS/PCOD Alert Section -->
+    <div class="text-center p-4 bg-light border rounded shadow-sm">
+        <h1 class="text-danger mb-4">You have PCOS/PCOD</h1>
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Left div: First paragraph and button -->
+                <div class="col-md-6 mb-4">
+                    <div class="text-center p-4 bg-light border rounded shadow-sm">
+                        <p class="text-info font-italic">
+                            It is crucial to adopt a healthy lifestyle and consult a medical professional for personalized guidance.
+                        </p>
+                        <button 
+                            class="btn btn-primary btn-lg mt-3"
+                            onclick="location.href='/consultation'"
+                        >
+                            Consult with a Doctor
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Right div: Second paragraph and button -->
+                <div class="col-md-6 mb-4">
+                    <div class="text-center p-4 bg-light border rounded shadow-sm">
+                        <p class="text-info font-italic">
+                            If you have good medical knowledge, consider taking the advanced test to understand your condition better.
+                        </p>
+                        <button 
+                            class="btn btn-primary btn-lg mt-3"
+                            onclick="location.href='/detection_advanced'"
+                        >
+                            Take Advanced Test
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yoga and Nutrition Plan Section -->
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left div: Yoga Plan Section -->
+        <div class="col-md-6 mb-4">
+            <div class="text-center p-4 bg-light border rounded shadow-sm">
+                <h3 class="text-success">Recommended Yoga Plan</h3>
+                <p class="text-muted">
+                    Yoga can be an effective way to manage PCOS symptoms. Here are some beneficial practices to get you started:
+                </p>
+                <ul class="list-unstyled">
+                    <li>🌿 Surya Namaskar (Sun Salutations)</li>
+                    <li>🌿 Bhujangasana (Cobra Pose)</li>
+                    <li>🌿 Balasana (Child's Pose)</li>
+                    <li>🌿 Dhanurasana (Bow Pose)</li>
+                </ul>
+                <button 
+                    class="btn btn-success btn-lg mt-3"
+                    onclick="location.href='/yoga'"
+                >
+                    Explore Yoga Plan
+                </button>
+            </div>
+        </div>
+        <!-- Right div: Nutrition & Diet Plan Section -->
+        <div class="col-md-6 mb-4">
+            <div class="text-center p-4 bg-light border rounded shadow-sm">
+                <h3 class="text-success">Recommended Nutrition & Diet Plan</h3>
+                <p class="text-muted">
+                    A balanced diet can help in managing PCOS symptoms. Consider incorporating the following into your meals:
+                </p>
+                <ul class="list-unstyled">
+                    <li>🍎 Fresh Fruits</li>
+                    <li>🥦 Vegetables</li>
+                    <li>🥑 Healthy Fats</li>
+                    <li>🌾 Whole Grains</li>
+                </ul>
+                <button 
+                    class="btn btn-success btn-lg mt-3"
+                    onclick="location.href='/nutrition.html'"
+                >
+                    Explore Nutrition Plan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

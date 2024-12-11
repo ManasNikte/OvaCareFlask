@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1 class="text-center">Blog Preview</h1>
+<hr>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <!-- Top Left: Blog Image -->
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <img src="{{ url_for('static', filename='images/blogs/' + blog.image) }}" 
+                 alt="{{ blog.title }}" 
+                 class="img-fluid rounded shadow" 
+                 style="max-height: 200px; width: auto;">
+        </div>
+        <!-- Top Right: Author and Date -->
+        <div class="col-md-8 col-12">
+            <h1 class="display-4">{{ blog.title }}</h1>
+            <h5 class="text-muted">By {{ blog.author }}</h5>
+            <p class="text-muted">Posted on {{ blog.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Bottom Left: Blog Content -->
+        <div class="col-md-8 col-12">
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Edit Blog</h5>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title" value="{{ blog.title }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Content</label>
+                            <textarea class="form-control" name="content" rows="5" required>{{ blog.content }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Upload New Image</label>
+                            <input type="file" class="form-control" name="image">
+                        </div>
+                        <button type="submit" class="btn btn-success">Update Blog</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Comments</h5>
+                    <!-- Make the table responsive on mobile -->
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Comment</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for comment in blog.comments %}
+                                <tr>
+                                    <td>{{ comment.content }}</td>
+                                    <td>{{ comment.author }}</td>
+                                    <td>{{ comment.created_at.strftime('%B %d, %Y at %I:%M %p') }}</td>
+                                    <td>{{ comment.email }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('delete_comment', comment_id=comment._id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Right: Action Section -->
+        <div class="col-md-4 col-12">
+            <div class="card mb-4 shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Actions</h5>
+                    {% if current_user.role == 'admin' %}
+                        <a href="{{ url_for('admin_blogs') }}" class="btn btn-secondary">Back to All Blogs</a>
+                    {% else %}
+                        <a href="{{ url_for('user_blogs') }}" class="btn btn-secondary">Back to Your Blogs</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

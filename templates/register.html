@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <!-- Dynamic Heading -->
+    <h2 id="register-heading">Register as User</h2>
+    
+    <!-- Toggle Buttons for User/Doctor Registration -->
+    <div class="btn-group" role="group" aria-label="Toggle registration">
+        <button id="user-toggle" type="button" class="btn btn-secondary" onclick="toggleForm('user')">Register as User</button>
+        <button id="doctor-toggle" type="button" class="btn btn-secondary" onclick="toggleForm('doctor')">Register as Doctor</button>
+    </div>
+
+    <br><br>
+
+    <!-- Registration Form -->
+    <form method="POST" id="registration-form">
+        <div class="form-group">
+            <input type="text" name="username" class="form-control" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
+
+        <!-- Hidden input to store role (user or doctor) -->
+        <input type="hidden" name="role" id="role" value="user">
+
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
+    </form>
+</div>
+
+<!-- JavaScript to toggle between user and doctor registration -->
+<script>
+    function toggleForm(role) {
+        // Set the role value based on the button clicked
+        document.getElementById('role').value = role;
+
+        // Change heading text based on role
+        const heading = document.getElementById('register-heading');
+        if (role === 'user') {
+            heading.textContent = 'Register as User';
+            document.getElementById('user-toggle').classList.add('btn-primary');
+            document.getElementById('user-toggle').classList.remove('btn-secondary');
+            document.getElementById('doctor-toggle').classList.add('btn-secondary');
+            document.getElementById('doctor-toggle').classList.remove('btn-primary');
+        } else if (role === 'doctor') {
+            heading.textContent = 'Register as Doctor';
+            document.getElementById('doctor-toggle').classList.add('btn-primary');
+            document.getElementById('doctor-toggle').classList.remove('btn-secondary');
+            document.getElementById('user-toggle').classList.add('btn-secondary');
+            document.getElementById('user-toggle').classList.remove('btn-primary');
+        }
+    }
+
+    // Initialize with user form selected by default
+    toggleForm('user');
+</script>
+{% endblock %}

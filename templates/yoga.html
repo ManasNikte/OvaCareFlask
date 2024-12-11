@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<br><br>
+<div class="text-center">
+    <h1 class="mb-4">Yoga Plans</h1>
+</div>
+<div class="container">
+    <div class="row">
+        {% for yoga in yoga_items %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ yoga.image }}" class="card-img-top" alt="{{ yoga.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ yoga.title }}</h5>
+                    <p class="card-text">{{ yoga.description }}</p>
+                    <a href="{{ yoga.link }}" target="_blank" class="btn btn-primary">Watch Video</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('yoga', page=page-1) }}">&laquo;</a></li>
+                {% endif %}
+                {% for i in range(1, total_pages + 1) %}
+                <li class="page-item {% if page == i %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('yoga', page=i) }}">{{ i }}</a>
+                </li>
+                {% endfor %}
+                {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('yoga', page=page+1) }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

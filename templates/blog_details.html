@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <!-- Top Left: Blog Image -->
+        <div class="col-md-4 d-flex justify-content-center align-items-center">
+            <img src="{{ url_for('static', filename='images/blogs/' + blog.image) }}" alt="{{ blog.title }}" class="img-fluid rounded" style="max-height: 200px; width: auto;">
+        </div>
+        <!-- Top Right: Author and Date -->
+        <div class="col-md-8">
+            <h1 class="display-4">{{ blog.title }}</h1>
+            <h5 class="text-muted">By {{ blog.author }}</h5>
+            <p class="text-muted">Posted on {{ blog.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Bottom Left: Blog Content -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p>{{ blog.content }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Right: Comments Section -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Comments</h4>
+                    <div id="comments" class="mb-4">
+                        {% for comment in comments %}
+                        <div class="comment mb-2 p-2 border rounded">
+                            <p><strong>{{ comment.author }}:</strong> {{ comment.content }}</p>
+                            <p><small>{{ comment.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small></p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if blog.comments|length > 3 %}
+                    <button id="loadMoreBtn" class="btn btn-secondary" onclick="loadMoreComments('{{ blog._id }}')">Load More</button>
+                    <button id="showLessBtn" class="btn btn-secondary" style="display: none;" onclick="showLessComments()">Show Less</button>
+                    {% endif %}
+                    
+                    <h5 class="card-title">Leave a Comment</h5>
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-2" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control mb-3" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control mb-3" name="content" rows="3" placeholder="Your comment here" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let skip = 3; // Initially skip 3 comments
+
+    function loadMoreComments(blogId) {
+        $.ajax({
+            url: '/load_more_comments/' + blogId + '?skip=' + skip,
+            type: 'GET',
+            success: function(response) {
+                // Append more comments if available
+                if (response.comments.length > 0) {
+                    let commentsHtml = '';
+                    response.comments.forEach(comment => {
+                        commentsHtml += `
+                            <div class="comment mb-2 p-2 border rounded">
+                                <p><strong>${comment.author}:</strong> ${comment.content}</p>
+                                <p><small>${new Date(comment.created_at).toLocaleString()}</small></p>
+                            </div>
+                        `;
+                    });
+                    $('#comments').append(commentsHtml);
+                    skip += response.comments.length;
+
+                    if (!response.more_available) {
+                        $('#loadMoreBtn').hide(); // Hide "Load More" when no more comments
+                        $('#showLessBtn').show(); // Show "Show Less" button
+                    }
+                }
+            }
+        });
+    }
+
+    function showLessComments() {
+        const commentsDiv = document.getElementById('comments');
+        const allComments = commentsDiv.querySelectorAll('.comment');
+
+        // Remove all comments except the first 3
+        allComments.forEach((comment, index) => {
+            if (index >= 3) {
+                comment.remove();
+            }
+        });
+
+        // Reset skip counter and toggle button visibility
+        skip = 3;
+        $('#loadMoreBtn').show();
+        $('#showLessBtn').hide();
+    }
+</script>
+{% endblock %}

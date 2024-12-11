@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br><h1 style="text-align: center;">Manage Blogs</h1><hr>
+
+<!-- Search Form -->
+<form method="get" action="{{ url_for('admin_blogs') }}" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ search_query }}">
+        </div>
+        <div class="col-md-3">
+            <select name="search_field" class="form-control">
+                <option value="author" {% if search_field == 'author' %}selected{% endif %}>Author</option>
+                <option value="content" {% if search_field == 'content' %}selected{% endif %}>Content</option>
+                <option value="created_at" {% if search_field == 'created_at' %}selected{% endif %}>Created At (YYYY-MM-DD)</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for blog in blogs %}
+                        <tr>
+                            <!-- Blog Image -->
+                            <td>
+                                <img src="{{ url_for('static', filename='images/blogs/' + blog['image']) }}" alt="{{ blog['title'] }}" class="img-thumbnail" style="max-width: 100px;">
+                            </td>
+                            <!-- Blog Title -->
+                            <td>{{ blog['title'] }}</td>
+                            <!-- Author Name -->
+                            <td>{{ blog['author'] }}</td>
+                            <!-- Created At -->
+                            <td>{{ blog['created_at'].strftime('%B %d, %Y at %I:%M %p') }}</td>
+                            <!-- Visibility Status -->
+                            <td>{{ blog['visibility'] }}</td>
+                            <!-- Actions -->
+                            <td>
+                                
+                                <a href="{{ url_for('toggle_visibility', blog_id=blog['_id']) }}" class="btn btn-warning btn-sm">Toggle Visibility</a>
+                                <a href="{{ url_for('preview_blog', post_id=blog['_id']) }}" class="btn btn-primary btn-sm">Preview</a>
+                                <a href="{{ url_for('delete_blog', blog_id=blog['_id']) }}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No blogs found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <nav>
+                <ul class="pagination">
+                    <!-- Previous Button -->
+                    {% if current_page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin_blogs', page=current_page-1, search=search_query, search_field=search_field) }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    <!-- Display page numbers -->
+                    {% for page_num in range(start_page, end_page + 1) %}
+                    <li class="page-item {% if current_page == page_num %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('admin_blogs', page=page_num, search=search_query, search_field=search_field) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                    
+                    <!-- Next Button -->
+                    {% if current_page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin_blogs', page=current_page+1, search=search_query, search_field=search_field) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

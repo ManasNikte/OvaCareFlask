@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 pt-4">
+    <h1 class="text-center">Profile of {{ username }}</h1><hr>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Update Email Form -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">Update Email</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ user.email }}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Update Email</button>
+                    </form>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Update Password Form -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">Update Password</h2>
+                    <form method="POST" action="{{ url_for('update_password') }}">
+                        <div class="form-group">
+                            <label for="current_password">Current Password</label>
+                            <input type="password" class="form-control" name="current_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">New Password</label>
+                            <input type="password" class="form-control" name="new_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="re-enter_new_password">Re-Enter New Password</label>
+                            <input type="password" class="form-control" name="re-enter_new_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Update Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

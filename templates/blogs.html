@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1 style="text-align: center;">Blogs</h1>
+<hr>
+<div class="row">
+    {% for blog in blogs %}
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <!-- Blog Image -->
+            <img src="{{ url_for('static', filename='images/blogs/' ~ blog['image']) }}" class="card-img-top" alt="{{ blog['title'] }}" style="max-width: 500px; max-height: 500px;">
+            <div class="card-body">
+                <!-- Blog Title -->
+                <h5 class="card-title">{{ blog['title'] }}</h5>
+                <!-- Blog Excerpt: Display first 3 words -->
+                <p class="card-text">{{ blog['content'].split()[:3] | join(" ") }}...</p>
+                <!-- Author Name -->
+                <p class="card-text"><small class="text-muted">By {{ blog['author'] }}</small></p>
+                <!-- Date and Time Posted -->
+                <p class="card-text"><small class="text-muted">Posted on {{ blog['created_at'].strftime('%B %d, %Y at %I:%M %p') }}</small></p>
+                <!-- Read More Button -->
+                <a href="{{ url_for('blog_details', blog_id=blog['_id']) }}" class="btn btn-primary">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination Controls -->
+<div class="pagination justify-content-center mt-4">
+    {% if page > 1 %}
+        <a href="{{ url_for('blogs', page=page-1) }}" class="btn btn-secondary">Previous</a>
+    {% endif %}
+    
+    {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}
+            <span class="btn btn-primary disabled">{{ p }}</span>
+        {% elif p == 1 or p == total_pages or (p >= page - 1 and p <= page + 1) %}
+            <a href="{{ url_for('blogs', page=p) }}" class="btn btn-secondary">{{ p }}</a>
+        {% elif p == 2 and page > 3 %}
+            <span class="btn btn-secondary">...</span>
+        {% elif p == total_pages - 1 and page < total_pages - 2 %}
+            <span class="btn btn-secondary">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('blogs', page=page+1) }}" class="btn btn-secondary">Next</a>
+    {% endif %}
+</div>
+
+{% endblock %}

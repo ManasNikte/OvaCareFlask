@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Resend Verification Email</h1>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Enter your email:</label>
+                    <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Resend Verification Email</button>
+            </form>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-warning mt-3">
+                        <ul class="mb-0">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}
